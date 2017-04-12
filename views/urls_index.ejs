@@ -4,37 +4,52 @@
 
   <head>
     <style>
-    table, th, td {
-        border: 1px solid black;
-        border-collapse: collapse;
+    table {
+        border-style: hidden;
+        border-radius: 14px;
+        padding: 20px;
         text-align: left;
+        font-size: 20 px;
+        background-color: lightpink;
     }
-    th, td {
-        padding: 5px;
-        text-align: left;
+    tr:hover{background-color:whitesmoke}
+    button {
+        background-color: peachpuff;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 15px;
+    }
+    .container{
+      max-width: 1000px;
+      margin: 0 auto;
     }
     </style>
   </head>
 
   <body>
-    <% include partials/_header %>
+    <div class="container">
 
-    <a href="url">link text</a>
+      <% include partials/_header %>
 
-    <table style="width:100%">
-      <!-- header for the table one time only -->
-      <tr>
-        <th>Short URLs</th>
-        <th colspan="2">URLs</th>
-      </tr>
-      <!-- Data part of the Table -->
-      <% for(var k in templateVars) { %>
+
+      <table style="width:70%">
+        <!-- header for the table one time only -->
         <tr>
-          <td><%= k %></td>
-          <td><%= templateVars[k] %>
+          <th>Short URLs</th>
+          <th colspan="2">URLs</th>
         </tr>
-      <% } %>
-    </table> <!-- Table tag closes -->
+        <!-- Data part of the Table -->
+        <% for(var k in templateVars) { %>
+          <tr>
+            <td><%= k %></td>
+            <td><%= templateVars[k] %></td>
+            <td><form method="POST" action="/urls/<%= k %>/delete"><button type= "submit"> Delete URL</button></form></td>
+          </tr>
+        <% } %>
+      </table> <!-- Table tag closes -->
+      <a href="url">This is a Tiny Link!</a>
+    </div>
+    
 
   </body>
 

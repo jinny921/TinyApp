@@ -5,9 +5,12 @@
   <head>
     <style>
     table, th, td {
-        border: 1px solid black;
-        border-collapse: collapse;
+        border-style: hidden;
+        border-radius: 14px;
+        padding: 20px;
         text-align: left;
+        font-size: 20 px;
+        background-color: lightpink;
     }
     th, td {
         padding: 5px;
@@ -25,8 +28,8 @@
     <th colspan="2">Shorten Form</th>
   </tr>
   <tr>
-    <td>http://www.lighthouselabs.ca</td>
-    <td>b2xVn2</td>
+    <td><%= longURL %></td>
+    <td><%= shortURL %></td>
   </tr>
 
   </body>

@@ -38,12 +38,11 @@ app.get("/urls/new", (req, res) => {
 });
 
 app.get("/urls", (req, res) => {
-  //let templateVars = { urls: urlDatabase};
   res.render("urls_index", {templateVars: urlDatabase});
 });
 
 app.get("/urls/:id", (req, res) => {
-  let templateVars = { shortURL: req.params.id };
+  let templateVars = { shortURL: req.params.id, longURL: urlDatabase[req.params.id] };
   res.render("urls_show", templateVars);
 });
 
@@ -53,7 +52,7 @@ app.post("/urls", (req, res) => {
     res.redirect("http://localhost:8080/urls/new");
   } else {
       urlDatabase[randomStr] = req.body.longURL;
-      res.redirect(`http://localhost:8080/u/${randomStr}`);
+      res.redirect(`http://localhost:8080/urls/${randomStr}`);
     }
 });
 
@@ -64,6 +63,12 @@ app.get("/u/:shortURL", (req, res) => {
   } else {
       res.redirect(urlDatabase[shortURL]);
     }
+});
+
+app.post("/urls/:id/delete", (req, res) => {
+  let shortURL = req.params.id;
+  delete urlDatabase[shortURL];
+  res.redirect("/urls");
 });
 
 app.listen(PORT, () => {
