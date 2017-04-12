@@ -1,10 +1,11 @@
-var express = require("express");
-var app = express();
-var PORT = process.env.PORT || 8080; // default port 8080
+const express = require("express");
+const app = express();
+const PORT = process.env.PORT || 8080; // default port 8080
 const bodyParser = require("body-parser");
-
+const cookieParser = require('cookie-parser')
 
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(cookieParser());
 app.set("view engine", "ejs");
 
 function generateRandomString() {
@@ -22,27 +23,38 @@ var urlDatabase = {
 };
 
 app.get("/", (req, res) => {
-  res.end("Hello!");
+  // if (login) {
+    res.redirect("/urls");
+  // } else {
+  //   res.redirect("/login");
+  // }
 });
 
 app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
 
-app.get("/hello", (req, res) => {
-  res.end("<html><body>Hello <b>World</b> What's up!</body></html>\n");
+// app.get("/login", (req, res) => {
+//   let template = { username: req.cookies["username"] };
+//   res.render("urls_index", template);
+// });
+
+app.post("/login", (req, res) => {
+  let username = req.body.username;
+  res.cookie("username", username);
+  res.redirect("/");
 });
 
 app.get("/urls/new", (req, res) => {
-  res.render("urls_new");
+  res.render("urls_new", {username: req.cookies["username"]});
 });
 
 app.get("/urls", (req, res) => {
-  res.render("urls_index", {templateVars: urlDatabase});
+  res.render("urls_index", {templateVars: urlDatabase, username: req.cookies["username"]});
 });
 
 app.get("/urls/:id", (req, res) => {
-  let templateVars = { shortURL: req.params.id, longURL: urlDatabase[req.params.id] };
+  let templateVars = { shortURL: req.params.id, longURL: urlDatabase[req.params.id], username: req.cookies["username"] };
   res.render("urls_show", templateVars);
 });
 
@@ -57,8 +69,9 @@ app.post("/urls", (req, res) => {
     }
 });
 
-app.get("/u/:shortURL", (req, res) => {
-  let shortURL = req.params.shortURL;
+
+app.get("/u/:id", (req, res) => {
+  let shortURL = req.params.id;
   if (!urlDatabase[shortURL]) {
     res.render("urls_index", {templateVars: urlDatabase});
   } else {

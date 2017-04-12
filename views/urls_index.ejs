@@ -19,15 +19,6 @@
         cursor: pointer;
         font-size: 15px;
       }
-      a:link {
-        background-color: whitesmoke;
-        border-style: solid grey;
-        border-radius: 20px;
-        padding: 3px 8px;
-        cursor: pointer;
-        font-size: 15px;
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
-      }
       .container{
         max-width: 1000px;
         margin: 0 auto;
@@ -36,11 +27,9 @@
   </head>
 
   <body>
+    <% include partials/_header %>
+
     <div class="container">
-
-      <% include partials/_header %>
-
-
       <table style="width:70%">
         <!-- header for the table one time only -->
         <tr>
@@ -53,11 +42,11 @@
             <td><%= k %></td>
             <td><%= templateVars[k] %></td>
             <td><form method="POST" action="/urls/<%= k %>/delete"><button type= "submit"> Delete URL</button></form></td>
-            <td><a href="/urls/<%= k %>">Edit URL</a></td>
+            <td><a href="/urls/<%= k %>"><button type= "submit">Edit URL</a></td>
           </tr>
         <% } %>
       </table> <!-- Table tag closes -->
-      <a href="urls/new">Let's create a Tiny Link!</a>
+      <a href="urls/new"><button type= "submit">Let's create a Tiny Link!</button></a>
     </div>
     
 
