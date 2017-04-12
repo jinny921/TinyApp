@@ -23,27 +23,23 @@ var urlDatabase = {
 };
 
 app.get("/", (req, res) => {
-  // if (login) {
-    res.redirect("/urls");
-  // } else {
-  //   res.redirect("/login");
-  // }
+  res.redirect("/urls");
 });
 
 app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
 
-// app.get("/login", (req, res) => {
-//   let template = { username: req.cookies["username"] };
-//   res.render("urls_index", template);
-// });
-
 app.post("/login", (req, res) => {
   let username = req.body.username;
   res.cookie("username", username);
   res.redirect("/");
 });
+
+app.post("/logout", (req, res) => {
+  res.clearCookie("username", req.params.username);
+  res.redirect("/");
+})
 
 app.get("/urls/new", (req, res) => {
   res.render("urls_new", {username: req.cookies["username"]});
