@@ -47,10 +47,23 @@ app.get("/urls/:id", (req, res) => {
   res.render("urls_show", templateVars);
 });
 
-
 app.post("/urls", (req, res) => {
-  urlDatabase[generateRandomString()] = req.body.longURL;  // debug statement to see POST parameters
-  res.send();         // Respond with 'Ok' (we will replace this)
+  let randomStr = generateRandomString();
+  if (!req.body.longURL) {
+    res.render("urls_index", {templateVars: urlDatabase});
+  } else {
+      urlDatabase[randomStr] = req.body.longURL;
+      res.redirect(`http://localhost:8080/u/${randomStr}`);
+    }
+});
+
+app.get("/u/:shortURL", (req, res) => {
+  let shortURL = req.params.shortURL;
+  if (!urlDatabase[shortURL]) {
+    res.render("urls_index", {templateVars: urlDatabase});
+  } else {
+      res.redirect(urlDatabase[shortURL]);
+    }
 });
 
 app.listen(PORT, () => {
