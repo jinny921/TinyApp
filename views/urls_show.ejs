@@ -4,18 +4,18 @@
 
   <head>
     <style>
-    table, th, td {
-        border-style: hidden;
-        border-radius: 14px;
-        padding: 20px;
-        text-align: left;
-        font-size: 20 px;
-        background-color: lightpink;
-    }
-    th, td {
-        padding: 5px;
-        text-align: left;
-    }
+      table, th, td {
+          border-style: hidden;
+          border-radius: 14px;
+          padding: 20px;
+          text-align: left;
+          font-size: 20 px;
+          background-color: lightblue;
+      }
+      th, td {
+          padding: 5px;
+          text-align: left;
+      }
     </style>
   </head>
 
@@ -23,14 +23,20 @@
     <% include partials/_header %>
 
     <table style="width:100%">
-  <tr>
-    <th>URLs</th>
-    <th colspan="2">Shorten Form</th>
-  </tr>
-  <tr>
-    <td><%= longURL %></td>
-    <td><%= shortURL %></td>
-  </tr>
+    <tr>
+      <th>URLs</th>
+      <th colspan="2">Shorten Form</th>
+    </tr>
+    <tr>
+      <td><%= longURL %></td>
+      <td><%= shortURL %></td>
+    </tr>
+
+    <form action="/urls/<%= shortURL %>" method="POST" style="margin:150px;"> 
+      <label for="longURL">Update URL:</label>
+      <input id="longURL" type="text" name="longURL" placeholder="http://" style="width: 300px">
+      <button type="submit">Update</button>
+    </form>
 
   </body>
 

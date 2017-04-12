@@ -4,25 +4,34 @@
 
   <head>
     <style>
-    table {
+      table {
         border-style: hidden;
         border-radius: 14px;
         padding: 20px;
         text-align: left;
         font-size: 20 px;
-        background-color: lightpink;
-    }
-    tr:hover{background-color:whitesmoke}
-    button {
-        background-color: peachpuff;
+        background-color: lightblue;
+      }
+      tr:hover{background-color:lightskyblue}
+      button {
+        background-color: whitesmoke;
         border-radius: 20px;
         cursor: pointer;
         font-size: 15px;
-    }
-    .container{
-      max-width: 1000px;
-      margin: 0 auto;
-    }
+      }
+      a:link {
+        background-color: whitesmoke;
+        border-style: solid grey;
+        border-radius: 20px;
+        padding: 3px 8px;
+        cursor: pointer;
+        font-size: 15px;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+      }
+      .container{
+        max-width: 1000px;
+        margin: 0 auto;
+      }
     </style>
   </head>
 
@@ -44,10 +53,11 @@
             <td><%= k %></td>
             <td><%= templateVars[k] %></td>
             <td><form method="POST" action="/urls/<%= k %>/delete"><button type= "submit"> Delete URL</button></form></td>
+            <td><a href="/urls/<%= k %>">Edit URL</a></td>
           </tr>
         <% } %>
       </table> <!-- Table tag closes -->
-      <a href="url">This is a Tiny Link!</a>
+      <a href="urls/new">Let's create a Tiny Link!</a>
     </div>
     
 

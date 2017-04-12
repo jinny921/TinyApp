@@ -49,10 +49,11 @@ app.get("/urls/:id", (req, res) => {
 app.post("/urls", (req, res) => {
   let randomStr = generateRandomString();
   if (!req.body.longURL) {
-    res.redirect("http://localhost:8080/urls/new");
+    res.redirect("/urls/new");
   } else {
       urlDatabase[randomStr] = req.body.longURL;
-      res.redirect(`http://localhost:8080/urls/${randomStr}`);
+      res.redirect('/urls/' + randomStr);
+
     }
 });
 
@@ -70,6 +71,17 @@ app.post("/urls/:id/delete", (req, res) => {
   delete urlDatabase[shortURL];
   res.redirect("/urls");
 });
+
+app.post("/urls/:id", (req, res) => {
+  let shortURL = req.params.id;
+  let longURL = req.body.longURL;
+  if (longURL) {
+  urlDatabase[shortURL] = longURL;
+  };
+  res.redirect("/urls/" + shortURL);
+});
+
+
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
