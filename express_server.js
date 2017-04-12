@@ -50,7 +50,7 @@ app.get("/urls/:id", (req, res) => {
 app.post("/urls", (req, res) => {
   let randomStr = generateRandomString();
   if (!req.body.longURL) {
-    res.render("urls_index", {templateVars: urlDatabase});
+    res.redirect("http://localhost:8080/urls/new");
   } else {
       urlDatabase[randomStr] = req.body.longURL;
       res.redirect(`http://localhost:8080/u/${randomStr}`);
