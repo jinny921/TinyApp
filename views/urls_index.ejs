@@ -22,18 +22,20 @@
     <a href="url">link text</a>
 
     <table style="width:100%">
+      <!-- header for the table one time only -->
       <tr>
-        <th>URLs</th>
-        <th colspan="2">Shorten URLs</th>
+        <th>Short URLs</th>
+        <th colspan="2">URLs</th>
       </tr>
-      <tr>
-        <td>http://www.lighthouselabs.ca</td>
-        <td>b2xVn2</td>
-      </tr>
-      <tr>
-        <td>http://www.google.com</td>
-        <td>9sm5xK</td>
-      </tr>
+      <!-- Data part of the Table -->
+      <% for(var k in templateVars) { %>
+        <tr>
+          <td><%= k %></td>
+          <td><%= templateVars[k] %>
+        </tr>
+      <% } %>
+    </table> <!-- Table tag closes -->
+
   </body>
 
 </html>

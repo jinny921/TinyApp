@@ -38,8 +38,8 @@ app.get("/urls/new", (req, res) => {
 });
 
 app.get("/urls", (req, res) => {
-  let templateVars = { urls: urlDatabase};
-  res.render("urls_index", templateVars);
+  //let templateVars = { urls: urlDatabase};
+  res.render("urls_index", {templateVars: urlDatabase});
 });
 
 app.get("/urls/:id", (req, res) => {
@@ -49,8 +49,8 @@ app.get("/urls/:id", (req, res) => {
 
 
 app.post("/urls", (req, res) => {
-  console.log(req.body);  // debug statement to see POST parameters
-  res.send("Ok");         // Respond with 'Ok' (we will replace this)
+  urlDatabase[generateRandomString()] = req.body.longURL;  // debug statement to see POST parameters
+  res.send();         // Respond with 'Ok' (we will replace this)
 });
 
 app.listen(PORT, () => {
