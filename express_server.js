@@ -61,6 +61,7 @@ app.get("/", (req, res) => {
     res.redirect("/login");
   }
 });
+
 app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
@@ -110,7 +111,11 @@ app.post("/logout", (req, res) => {
 });
 
 app.get("/urls/new", (req, res) => {
-  res.render("urls_new");
+  if (!req.user) {
+    res.render("urls_login");
+  } else {
+    res.render("urls_new");
+  }
 });
 
 app.get("/urls", (req, res) => {
