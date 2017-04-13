@@ -28,6 +28,9 @@
 
   <body>
     <% include partials/_header %>
+    <% if (!username) { %>
+      <a href="/login"><button type= "submit">Login</button></a>
+    <% } %>
 
     <div class="container">
       <table style="width:70%">

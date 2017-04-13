@@ -23,16 +23,26 @@ var urlDatabase = {
 };
 
 app.get("/", (req, res) => {
-  res.redirect("/urls");
+  if (req.cookies.username && req.cookies.username) {
+    res.render("urls_index", {templateVars: urlDatabase, username: req.cookies["username"]});
+  } else {
+    res.redirect("/login");
+  }
 });
 
 app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
 
+app.get("/login", (req, res) => {
+  res.render("url_login", {username: req.cookies["username"], password: req.cookies["password"]});
+})
+
 app.post("/login", (req, res) => {
   let username = req.body.username;
+  let password = req.body.password;
   res.cookie("username", username);
+  res.cookie("password", password);
   res.redirect("/");
 });
 
@@ -46,7 +56,11 @@ app.get("/urls/new", (req, res) => {
 });
 
 app.get("/urls", (req, res) => {
-  res.render("urls_index", {templateVars: urlDatabase, username: req.cookies["username"]});
+  if (req.cookies.username && req.cookies.password) {
+    res.render("urls_index", {templateVars: urlDatabase, username: req.cookies["username"]});
+  } else {
+    res.render("url_login", {username: req.cookies["username"], password: req.cookies["password"]});
+  }
 });
 
 app.get("/urls/:id", (req, res) => {
@@ -64,7 +78,6 @@ app.post("/urls", (req, res) => {
 
     }
 });
-
 
 app.get("/u/:id", (req, res) => {
   let shortURL = req.params.id;

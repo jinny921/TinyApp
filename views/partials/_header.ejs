@@ -1,18 +1,17 @@
-<header>
-  <h1>TinyApp</h1>
-  <% if (username) {%>
-    <h4>You are logged in as: <%= username %></h4>
-      <form action="/logout" method="POST" style="margin:150px;">
-        <button type= "submit">Logout</button>
-      
-    </form>
-  <% } else { %>
-    <form action="/login" method="POST" style="margin:150px;">
-
-      <label for="longURL">Username:</label>
-      <input id="username" type="text" name="username" style="width: 300px">
-      <input type="submit" value="sign in">
-
-    </form>
-  <% } %>
-</header>
+<body>
+  <header>
+    <div class = "header-left">
+      <h1>TinyAppX</h1>
+    </div>
+    <div class = "header-right">
+      <p><i>
+        <% if (username) {%>
+        <h4>You are logged in as: <%= username %></h4>
+          <form action="/logout" method="POST" style="margin:150px;">
+            <button type= "submit">Logout</button>
+        </form>
+        <% } %>
+      </i></p>
+    </div>
+  </header>
+</body>
