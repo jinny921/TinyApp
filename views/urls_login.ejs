@@ -19,13 +19,14 @@
 <body>
   <% include partials/_header %>
   <form action="/login" method="POST" style="margin:150px;">
-
-    <label for="username">Username:</label>
-    <input id="username" type="text" name="username" placeholder="@gmail.com" style="width: 300px">
-    <label for="password">Password:</label>
-    <input id="password" type="text" name="password" style="width:300">
-    <input type="submit" value="Login">
-
+    <fieldset>
+      <legend>Log In</legend>
+      <label for="email">Email:</label><br>
+      <input id="email" type="email" name="email" placeholder="Enter your email" style="width: 300px"><br>
+      <label for="password">Password:</label><br>
+      <input id="password" type="text" name="password" placeholder="Enter your password" style="width:300"><br>
+      <button type="submit">Log In</button>
+    </fieldset>
   </form>
 </body>
 </html>

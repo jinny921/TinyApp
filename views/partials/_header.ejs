@@ -1,13 +1,19 @@
 <header>
+
   <div class="header-left">
     <h1>TinyAppX</h1>
   </div>
+
   <div class="header-right">
-    <% if (username) {%>
+    <% if (user) {%>
       <form action="/logout" method="POST" style="margin:0px;">
-        <h4>You are logged in as: <%= username %> <button type= "submit">Logout</button></h4>
+        <h4>You are logged in as: <%= user.email %> <button type= "submit">Logout</button></h4>
       </form>
+    <% } else {%>
+      <a href="/login"><button type="submit">Login</button></a>
+      <a href="/register"><button type="submit">Register</button></a>
     <% } %>
   </div>
+
 </header>
 

@@ -7,6 +7,16 @@
   <title>Document</title>
 </head>
 <body>
-  
+  <% include partials/_header %>
+
+  <form action="/register" method="POST" style="margin:150px;">
+
+  <label for="email">Email:</label>
+  <input id="email" type="email" name="email" placeholder="What's your email" style="width: 300px"><br>
+  <label for="password">Password:</label>
+  <input id="password" type="password" name="password" placeholder="Set your password" style="width:300"><br>
+  <input type="submit" value="Register">
+
+  </form>
 </body>
 </html>
