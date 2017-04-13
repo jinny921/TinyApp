@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser')
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 app.set("view engine", "ejs");
+app.use(express.static('staticFiles'));
 
 function generateRandomString() {
   let randomString = "";

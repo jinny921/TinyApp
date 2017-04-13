@@ -1,18 +1,13 @@
-<link rel="stylesheet" type="text/css" href="myStyles.css">
-<body>
-  <header>
-    <div class = "header-left">
-      <h1>TinyAppX</h1>
-    </div>
-    <div class = "header-right">
-      <p><i>
-        <% if (username) {%>
-        <h4>You are logged in as: <%= username %></h4>
-          <form action="/logout" method="POST" style="margin:150px;">
-            <button type= "submit">Logout</button>
-        </form>
-        <% } %>
-      </i></p>
-    </div>
-  </header>
-</body>
+<header>
+  <div class="header-left">
+    <h1>TinyAppX</h1>
+  </div>
+  <div class="header-right">
+    <% if (username) {%>
+      <form action="/logout" method="POST" style="margin:0px;">
+        <h4>You are logged in as: <%= username %> <button type= "submit">Logout</button></h4>
+      </form>
+    <% } %>
+  </div>
+</header>
+
