@@ -3,6 +3,7 @@ const app = express();
 const PORT = process.env.PORT || 8080; // default port 8080
 const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser')
+const bcrypt = require('bcrypt');
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
@@ -58,12 +59,12 @@ const users = {
   "userRandomID": {
     id: "userRandomID", 
     email: "user@example.com", 
-    password: "purple-monkey-dinosaur"
+    password: "$2a$10$o/UfsinL7B.DPrjV23k6huqZu39bC1gL1mkhop4/rK6ufq/WbKPnC"
   },
  "user2RandomID": {
     id: "user2RandomID", 
     email: "user2@example.com", 
-    password: "dishwasher-funk"
+    password: "$2a$10$qMwUpf3w1jfvZblLo4fiMOIws7/H.ZMhGs.gXxw/4bl4CAQRdhimu"
   }
 };
 
@@ -73,8 +74,6 @@ app.use((req, res, next) => {
   res.locals.urlArray = urlsForUser(req.cookies.user_id);
   next();
 });
-
-
 
 app.get("/", (req, res) => {
   if (req.user) {
@@ -102,8 +101,9 @@ app.post("/register", (req, res) => {
       let userEmail = req.body.email;
       let passWord = req.body.password;
       let randomID = generateRandomString();
-      users[randomID] = { id: randomID, email: userEmail, password: passWord };
-      res.cookie("user_id", randomID);
+      let hash = bcrypt.hashSync(passWord, 10);
+      users[randomID] = { id: randomID, email: userEmail, password: hash };
+      res.cookie("user_id", users[randomID]);
       res.redirect("/");
   }
 });
@@ -118,18 +118,14 @@ app.get("/login", (req, res) => {
 
 app.post("/login", (req, res) => {
   let user = findUserByEmail(req.body.email);
-  if (user) {
-    if (req.body.password === user.password) {
-      // log them in
-      res.cookie("user_id", user.id).redirect("/");
-    } else {
-      // passwords don't match
-      res.sendStatus(403);
-    }
-  } else {
-    // email doesn't exist
-    res.status(403).send("This email doesn't exist");
+  if (!user) {
+    res.status(403).send("This email doesn't exist, please register");
   }
+  if (bcrypt.compareSync(req.body.password, user.password)) {
+    res.cookie("user_id", user.id).redirect("/"); 
+  } else {
+    res.status(403).send("Email and Password doesn't match");
+  } 
 });
 
 app.post("/logout", (req, res) => {
