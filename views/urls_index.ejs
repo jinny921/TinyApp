@@ -20,12 +20,12 @@
           <th colspan="2">URLs</th>
         </tr>
         <!-- Data part of the Table -->
-        <% for(var k in urlDatabase) { %>
+        <% for(let url of urlArray) { %>
           <tr>
-            <td><%= k %></td>
-            <td><%= urlDatabase[k] %></td>
-            <td><form method="POST" action="/urls/<%= k %>/delete"><button type= "submit"> Delete URL</button></form></td>
-            <td><a href="/urls/<%= k %>"><button type= "submit">Edit URL</a></td>
+            <td><%= url.shortURL %></td>
+            <td><%= url.longURL %></td>
+            <td><form method="POST" action="/urls/<%= url.shortURL %>/delete"><button type= "submit"> Delete URL</button></form></td>
+            <td><a href="/urls/<%= url.shortURL %>"><button type= "submit">Edit URL</a></td>
           </tr>
         <% } %>
       </table> <!-- Table tag closes -->

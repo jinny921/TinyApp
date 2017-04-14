@@ -25,11 +25,33 @@ function findUserByEmail(email) {
     }
   };
   return null;
+};
+
+function findShortUrl(shortURL) {
+  if (urlDatabase.hasOwnProperty(shortURL)) {
+    return urlDatabase[shortURL];
+  }
 }
 
+function urlsForUser(id) {
+  return Object.keys(urlDatabase).map(shortURL =>
+    urlDatabase[shortURL]
+    ).filter(url => 
+    url.userID === id
+    ); 
+};
+
 var urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
+  "b2xVn2": {
+    userID: "userRandomID",
+    shortURL: "b2xVn2",
+    longURL: "http://www.lighthouselabs.ca"
+  },
+  "9sm5xK": {
+    userID: "user2RandomID",
+    shortURL: "9sm5xK",
+    longURL: "http://www.google.com"
+  }
 };
 
 const users = { 
@@ -48,7 +70,7 @@ const users = {
 app.use((req, res, next) => {
   req.user = users[req.cookies.user_id];
   res.locals.user = req.user;
-  res.locals.urlDatabase = urlDatabase;
+  res.locals.urlArray = urlsForUser(req.cookies.user_id);
   next();
 });
 
@@ -87,7 +109,11 @@ app.post("/register", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-  res.render("urls_login");
+  if (req.user) {
+    res.redirect("/");
+  } else {
+    res.render("urls_login");
+  }
 });
 
 app.post("/login", (req, res) => {
@@ -122,6 +148,7 @@ app.get("/urls", (req, res) => {
   if (req.user) {
     res.render("urls_index");
   } else {
+
     res.render("urls_login");
   }
 });
@@ -131,25 +158,51 @@ app.post("/urls", (req, res) => {
   if (!req.body.longURL) {
     res.redirect("/urls/new");
   } else {
-      urlDatabase[randomStr] = req.body.longURL;
+    const newURL = {
+      userID: req.cookies.user_id,
+      shortURL: randomStr,
+      longURL: req.body.longURL
+
+    }
+      urlDatabase[randomStr] = newURL;
+      console.log(urlDatabase);
       res.redirect('/urls/' + randomStr);
     }
 });
 
-app.get("/urls/:id", (req, res) => {
-  res.render("urls_show", {
-    shortURL: req.params.id,
-    longURL: urlDatabase[req.params.id]
-  });
+app.get("/urls/:shortURL", (req, res) => {
+  const shortURL = req.params.shortURL;
+  const existShort = findShortUrl(shortURL);
+
+  if (!existShort) {
+    res.status(404).send("This is shortURL doesn't exist!");
+  } else if (!req.user) {
+    res.status(401).send("Please log in first");
+  } else if (urlDatabase[shortURL].userID !== req.cookies.user_id) {
+    res.status(403).send("This is not your URL!");
+  } else {
+      res.render("urls_show", {
+        shortURL: shortURL,
+        longURL: urlDatabase[shortURL].longURL
+      });
+  }
 });
 
 app.post("/urls/:id", (req, res) => {
-  let shortURL = req.params.id;
-  let longURL = req.body.longURL;
-  if (longURL) {
-  urlDatabase[shortURL] = longURL;
-  };
-  res.redirect("/urls/" + shortURL);
+  const shortURL = req.params.id;
+  const longURL = req.body.longURL;
+  const existShort = findShortUrl(shortURL);
+  
+  if (!existShort) {
+    res.status(404).send("This is shortURL doesn't exist!");
+  } else if (!req.user) {
+    res.status(401).send("Please log in first");
+  } else if (urlDatabase[shortURL].userID !== req.cookies.user_id) {
+    res.status(403).send("This is not your URL!");
+  } else {
+      urlDatabase[shortURL].longURL = longURL;
+      res.redirect("/urls/" + shortURL);
+  }
 });
 
 app.get("/u/:id", (req, res) => {
@@ -163,8 +216,12 @@ app.get("/u/:id", (req, res) => {
 
 app.post("/urls/:id/delete", (req, res) => {
   let shortURL = req.params.id;
-  delete urlDatabase[shortURL];
-  res.redirect("/urls");
+  if (urlDatabase[shortURL].userID === req.cookies.user_id) {
+    delete urlDatabase[shortURL];
+    res.redirect("/urls");
+  } else {
+    res.status(400).send("This is not your URL!");
+  }
 });
 
 app.listen(PORT, () => {
