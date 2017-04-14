@@ -2,11 +2,13 @@ const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 8080; // default port 8080
 const bodyParser = require("body-parser");
-const cookieParser = require('cookie-parser')
+const cookieSession = require('cookie-session')
 const bcrypt = require('bcrypt');
 
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(cookieParser());
+app.use(cookieSession({
+  name: 'session',
+  keys: ["lighthouse"]}));
 app.set("view engine", "ejs");
 app.use(express.static('staticFiles'));
 
@@ -69,9 +71,9 @@ const users = {
 };
 
 app.use((req, res, next) => {
-  req.user = users[req.cookies.user_id];
+  req.user = users[req.session.user_id];
   res.locals.user = req.user;
-  res.locals.urlArray = urlsForUser(req.cookies.user_id);
+  res.locals.urlArray = urlsForUser(req.session.user_id);
   next();
 });
 
@@ -103,7 +105,7 @@ app.post("/register", (req, res) => {
       let randomID = generateRandomString();
       let hash = bcrypt.hashSync(passWord, 10);
       users[randomID] = { id: randomID, email: userEmail, password: hash };
-      res.cookie("user_id", users[randomID]);
+      req.session.user_id = users[randomID];
       res.redirect("/");
   }
 });
@@ -122,14 +124,16 @@ app.post("/login", (req, res) => {
     res.status(403).send("This email doesn't exist, please register");
   }
   if (bcrypt.compareSync(req.body.password, user.password)) {
-    res.cookie("user_id", user.id).redirect("/"); 
+    req.session.user_id = user.id;
+    res.redirect("/");
   } else {
     res.status(403).send("Email and Password doesn't match");
   } 
 });
 
 app.post("/logout", (req, res) => {
-  res.clearCookie("user_id").redirect("/");
+  req.session = undefined;
+  res.redirect("/");
 });
 
 app.get("/urls/new", (req, res) => {
