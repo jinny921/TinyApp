@@ -5,17 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
+  <link rel="stylesheet" type="text/css" href="myStyles.css">
+  <style>
+  form {
+    border-style: hidden;
+    border-radius: 14px;
+    padding: 30px;
+    text-align: left;
+    font-size: 20 px;
+    background-color: lightblue;
+  }
+</style>
 </head>
 <body>
   <% include partials/_header %>
   <form action="/register" method="POST" style="margin:150px;">
-
-  <label for="email">Email:</label>
-  <input id="email" type="email" name="email" placeholder="What's your email" style="width: 300px"><br>
-  <label for="password">Password:</label>
-  <input id="password" type="password" name="password" placeholder="Set your password" style="width:300"><br>
-  <input type="submit" value="Register">
-
+    <fieldset>
+      <legend>Register</legend>
+      <label for="email">Email:</label><br>
+      <input id="email" type="email" name="email" placeholder="What's your email" style="width: 300px"><br>
+      <label for="password">Password:</label><br>
+      <input id="password" type="password" name="password" placeholder="Set your password" style="width:300"><br>
+      <input type="submit" value="Register">
+    </fieldset>
   </form>
 </body>
 </html>
