@@ -2,8 +2,9 @@ const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 3000; // default port 8080
 const bodyParser = require("body-parser");
-const cookieSession = require('cookie-session')
+const cookieSession = require('cookie-session');
 const bcrypt = require('bcrypt');
+const methodOverride = require('method-override');
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieSession({
@@ -11,6 +12,7 @@ app.use(cookieSession({
   keys: ["lighthouse"]}));
 app.set("view engine", "ejs");
 app.use(express.static('staticFiles'));
+app.use(methodOverride('_method'));
 
 //generating random 6 digit string for userID and shortURL
 function generateRandomString() {
@@ -207,7 +209,7 @@ app.get("/urls/:shortURL", (req, res, next) => {
     }
 });
 
-app.post("/urls/:id", (req, res, next) => {
+app.put("/urls/:id", (req, res, next) => {
   const shortURL = req.params.id;
   const longURL = req.body.longURL;
   const existShort = findShortUrl(shortURL); 
@@ -232,7 +234,7 @@ app.get("/u/:id", (req, res, next) => {
     }
 });
 
-app.post("/urls/:id/delete", (req, res, next) => {
+app.delete("/urls/:id", (req, res, next) => {
   let shortURL = req.params.id;
   if (urlDatabase[shortURL].userID === req.session.user_id) {
     delete urlDatabase[shortURL];
